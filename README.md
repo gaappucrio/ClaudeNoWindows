@@ -1,4 +1,4 @@
-# 🤖 Guia Oficial da Equipe: Dominando o Claude Code
+# Guia Oficial do GAAP: Dominando o Claude Code
 
 Bem-vindo(a) ao guia de configuração e boas práticas do **Claude Code** do GAAP! 
 
