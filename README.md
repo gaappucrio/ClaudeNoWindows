@@ -6,7 +6,7 @@ O Claude Code é a ferramenta oficial de linha de comando (CLI) agêntica da Ant
 
 Este documento foi criado para padronizar a instalação no Windows, configurar nosso ambiente da melhor forma possível e garantir que todos do time extraiam o máximo de produtividade no dia a dia.
 
-#📋 Índice#
+## 📋 Índice ##
 Pré-requisitos e Instalação no Windows
 Resolvendo Problemas Comuns de Instalação (PATH)
 Como Fazer Login e Autenticar
