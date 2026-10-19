@@ -2,21 +2,21 @@
 
 Bem-vindo(a) ao guia de configuração e boas práticas do **Claude Code do GAAP**!
 
-O **Claude Code** é a ferramenta oficial de linha de comando (CLI) agêntica da Anthropic. Diferente de um chat comum no navegador, ele vive diretamente no seu terminal, entende toda a estrutura do nosso repositório, edita múltiplos arquivos, executa testes, analisa erros no terminal e interage diretamente com o Git.
+O **Claude Code** é a ferramenta oficial de linha de comando (CLI) agêntica da Anthropic. Diferente de um chat comum no navegador, ele vive diretamente no seu terminal, entende toda a estrutura do nosso repositório, edita múltiplos arquivos, executa testes, analisa erros no terminal e interage diretamente com el Git.
 
 Este documento foi criado para padronizar a instalação no Windows, configurar nosso ambiente da melhor forma possível e garantir que todos do time extraiam o máximo de produtividade no dia a dia — seja para programação quanto para pesquisas e trabalhos acadêmicos.
 
 ## 📋 Índice
 
-1. [Pré-requisitos e Instalação no Windows](#-1-pré-requisitos-e-instalação-no-windows)
-2. [Resolvendo Problemas Comuns de Instalação (PATH)](#️-2-resolvendo-problemas-comuns-de-instalação-path)
-3. [Como Fazer Login e Autenticar](#-3-como-fazer-login-e-autenticar)
-4. [Configuração Ideal (O Segredo da Produtividade)](#%EF%B8%8F-4-configuração-ideal-o-segredo-da-produtividade)
-5. [Fluxo de Trabalho no Dia a Dia](#-5-fluxo-de-trabalho-no-dia-a-dia)
+1. [Pré-requisitos e Instalação no Windows](#1-pré-requisitos-e-instalação-no-windows)
+2. [Resolvendo Problemas Comuns de Instalação (PATH)](#2-resolvendo-problemas-comuns-de-instalação-path)
+3. [Como Fazer Login e Autenticar](#3-como-fazer-login-e-autenticar)
+4. [Configuração Ideal (O Segredo da Produtividade)](#4-configuração-ideal-o-segredo-da-produtividade)
+5. [Fluxo de Trabalho no Dia a Dia](#5-fluxo-de-trabalho-no-dia-a-dia)
    * [Fluxo para Desenvolvimento](#51-fluxo-de-trabalho-para-desenvolvimento)
    * [Pesquisas e Trabalhos Acadêmicos](#52-adendo-o-claude-code-para-pesquisas-e-trabalhos-acadêmicos)
-6. [Tabela de Comandos Essenciais (Cheat Sheet)](#-6-tabela-de-comandos-essenciais-cheat-sheet)
-7. [Regras de Ouro do Nosso Time](#-7-regras-de-ouro-do-nosso-time)
+6. [Tabela de Comandos Essenciais (Cheat Sheet)](#6-tabela-de-comandos-essenciais-cheat-sheet)
+7. [Regras de Ouro do Nosso Time](#7-regras-de-ouro-do-nosso-time)
 
 ---
 
@@ -86,7 +86,7 @@ Se ao digitar `claude --version` aparecer o erro *"O termo 'claude' não é reco
 > ⚠️ **Atenção:** Nunca inicie o Claude Code solto na pasta raiz do seu usuário (`C:\Users\Nome`). Ele foi feito para trabalhar dentro da pasta do projeto!
 
 1. Navegue pelo terminal até a pasta do repositório em que você vai trabalhar:
-   ```bash
+   ```powershell
    cd C:\caminho\para\nosso-projeto
    ```
 2. Inicie o Claude Code digitando:
@@ -110,7 +110,7 @@ O arquivo `CLAUDE.md` na raiz do projeto funciona como um "manual de instruçõe
 
 * **Se o repositório ainda não tiver um `CLAUDE.md`:**
   Dentro do Claude Code, digite:
-  ```text
+  ```bash
   /init
   ```
   Ele vai analisar nossos arquivos (`package.json`, `requirements.txt`, estrutura de pastas, etc.) e criar um `CLAUDE.md` inicial automaticamente!
@@ -187,8 +187,6 @@ Aqui está o método mais eficiente utilizado por times profissionais para traba
   * *"Analise minhas alterações, rode os testes para garantir que nada quebrou e crie um commit seguindo o padrão do repositório."*
   * *"Estou com conflito de merge na branch atual. Analise os conflitos, explique o que mudou de cada lado e resolva para mim."*
 
----
-
 ### 5.2. Adendo: O Claude Code para Pesquisas e Trabalhos Acadêmicos
 
 💡 **Sabia que ele vai além da programação?**
@@ -209,7 +207,7 @@ Imagine uma pasta chamada `Trabalho_Faculdade` com artigos em PDF e anotações:
 
 1. Abra o PowerShell ou o terminal do VS Code.
 2. Navegue até a pasta:
-   ```bash
+   ```powershell
    cd "C:\Users\SeuUsuario\Documents\Trabalho_Faculdade"
    ```
 3. Inicie o Claude Code:
