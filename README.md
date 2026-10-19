@@ -8,17 +8,19 @@ Este documento foi criado para padronizar a instalação no Windows, configurar 
 
 ## 📋 Índice
 
-1. [Pré-requisitos e Instalação no Windows](#1-pré-requisitos-e-instalação-no-windows)
-2. [Resolvendo Problemas Comuns de Instalação (PATH)](#2-resolvendo-problemas-comuns-de-instalação-path)
-3. [Como Fazer Login e Autenticar](#3-como-fazer-login-e-autenticar)
-4. [Configuração Ideal (O Segredo da Produtividade)](#4-configuração-ideal-o-segredo-da-produtividade)
-5. [Fluxo de Trabalho no Dia a Dia](#5-fluxo-de-trabalho-no-dia-a-dia)
-   * [Fluxo para Desenvolvimento](#51-fluxo-de-trabalho-para-desenvolvimento)
-   * [Pesquisas e Trabalhos Acadêmicos](#52-adendo-o-claude-code-para-pesquisas-e-trabalhos-acadêmicos)
-6. [Tabela de Comandos Essenciais (Cheat Sheet)](#6-tabela-de-comandos-essenciais-cheat-sheet)
-7. [Regras de Ouro do Nosso Time](#7-regras-de-ouro-do-nosso-time)
+1. [Pré-requisitos e Instalação no Windows](#sec-1-instalacao-windows)
+2. [Resolvendo Problemas Comuns de Instalação (PATH)](#sec-2-problemas-path)
+3. [Como Fazer Login e Autenticar](#sec-3-login-autenticacao)
+4. [Configuração Ideal (O Segredo da Produtividade)](#sec-4-configuracao)
+5. [Fluxo de Trabalho no Dia a Dia](#sec-5-fluxo-trabalho)
+   * [Fluxo para Desenvolvimento](#sec-5-1-desenvolvimento)
+   * [Pesquisas e Trabalhos Acadêmicos](#sec-5-2-pesquisas-academicas)
+6. [Tabela de Comandos Essenciais (Cheat Sheet)](#sec-6-comandos-essenciais)
+7. [Regras de Ouro do Nosso Time](#sec-7-regras-time)
 
 ---
+
+<a id="sec-1-instalacao-windows"></a>
 
 ## 💻 1. Pré-requisitos e Instalação no Windows
 
@@ -65,6 +67,8 @@ irm https://claude.ai/install.ps1 | iex
 
 ---
 
+<a id="sec-2-problemas-path"></a>
+
 ## 🛠️ 2. Resolvendo Problemas Comuns de Instalação (PATH)
 
 Se ao digitar `claude --version` aparecer o erro *"O termo 'claude' não é reconhecido como nome de cmdlet..."* ou um aviso de que `C:\Users\SeuUsuario\.local\bin` não está no seu PATH, siga este passo a passo rápido:
@@ -80,6 +84,8 @@ Se ao digitar `claude --version` aparecer o erro *"O termo 'claude' não é reco
 6. Reinicie o seu terminal (e o VS Code, se estiver aberto) e teste `claude --version` novamente!
 
 ---
+
+<a id="sec-3-login-autenticacao"></a>
 
 ## 🔐 3. Como Fazer Login e Autenticar
 
@@ -99,6 +105,8 @@ Se ao digitar `claude --version` aparecer o erro *"O termo 'claude' não é reco
 4. **Pronto!** Caso precise trocar de conta no futuro, basta digitar `/login` ou `/logout` dentro da sessão do Claude.
 
 ---
+
+<a id="sec-4-configuracao"></a>
 
 ## ⚙️ 4. Configuração Ideal (O Segredo da Produtividade)
 
@@ -158,7 +166,11 @@ Por padrão, o Claude pede permissão antes de editar arquivos ou rodar comandos
 
 ---
 
+<a id="sec-5-fluxo-trabalho"></a>
+
 ## 🚀 5. Fluxo de Trabalho no Dia a Dia
+
+<a id="sec-5-1-desenvolvimento"></a>
 
 ### 5.1. Fluxo de Trabalho para Desenvolvimento
 
@@ -186,6 +198,8 @@ Aqui está o método mais eficiente utilizado por times profissionais para traba
   O Claude Code opera o Git com maestria. Exemplos de prompts:
   * *"Analise minhas alterações, rode os testes para garantir que nada quebrou e crie um commit seguindo o padrão do repositório."*
   * *"Estou com conflito de merge na branch atual. Analise os conflitos, explique o que mudou de cada lado e resolva para mim."*
+
+<a id="sec-5-2-pesquisas-academicas"></a>
 
 ### 5.2. Adendo: O Claude Code para Pesquisas e Trabalhos Acadêmicos
 
@@ -244,6 +258,8 @@ Imagine uma pasta chamada `Trabalho_Faculdade` com artigos em PDF e anotações:
 
 ---
 
+<a id="sec-6-comandos-essenciais"></a>
+
 ## ⚡ 6. Tabela de Comandos Essenciais (Cheat Sheet)
 
 Digite `/` no prompt do Claude Code para ver todos os comandos disponíveis. Os mais utilizados na rotina incluem:
@@ -265,6 +281,8 @@ Digite `/` no prompt do Claude Code para ver todos os comandos disponíveis. Os 
 | `Ctrl + C` ou `Esc` | Interrompe o Claude imediatamente no meio de uma ação | Se perceber que ele entendeu errado e está indo pelo caminho ruim |
 
 ---
+
+<a id="sec-7-regras-time"></a>
 
 ## 🤝 7. Regras de Ouro do Nosso Time
 
