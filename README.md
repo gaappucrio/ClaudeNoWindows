@@ -17,6 +17,7 @@ Este documento foi criado para padronizar a instalação no Windows, configurar 
    * [Pesquisas e Trabalhos Acadêmicos](#sec-5-2-pesquisas-academicas)
 6. [Tabela de Comandos Essenciais (Cheat Sheet)](#sec-6-comandos-essenciais)
 7. [Regras de Ouro do Nosso Time](#sec-7-regras-time)
+8. [Otimizando o Uso de Tokens! (Multi-Modelos, Advisor e Subagentes)](#sec-8-otimizando-tokens)
 
 ---
 
@@ -276,6 +277,8 @@ Digite `/` no prompt do Claude Code para ver todos os comandos disponíveis. Os 
 | `/resume` | Abre uma lista de conversas anteriores para continuar | Quando você fechou o terminal ontem e quer retomar hoje |
 | `/btw [pergunta]` | Faz uma pergunta rápida paralela sem poluir o histórico principal | Para tirar dúvida rápida de sintaxe no meio de uma tarefa |
 | `/model` | Alterna o modelo ativo (Sonnet para dia a dia, Opus para complexos) | Para equilibrar velocidade/custo e capacidade de raciocínio |
+| `/advisor [modelo]` | Define um modelo mais forte (ex: `opus`) como conselheiro da sessão | Para usar `sonnet` ou `haiku` na execução com supervisão do `opus` |
+| `/effort [nível]` | Ajusta o esforço de raciocínio (`low`, `medium`, `high`, `max`) | Para economizar tokens em tarefas fáceis (`low`) ou focar nas difíceis |
 | `/usage` ou `/cost` | Mostra consumo atual do plano ou gastos da API | Para acompanhar os limites da conta da equipe |
 | `/doctor` | Verifica a saúde da instalação, variáveis e configurações | Sempre que algo parecer travado ou com erro de sistema |
 | `Ctrl + C` ou `Esc` | Interrompe o Claude imediatamente no meio de uma ação | Se perceber que ele entendeu errado e está indo pelo caminho ruim |
@@ -292,5 +295,156 @@ Para mantermos a qualidade do nosso código e o bom uso da ferramenta na equipe,
 2. **Peça para ele verificar o próprio trabalho:** Sempre inclua a forma de validação no pedido. Em vez de *"Crie a função X"*, peça *"Crie a função X e rode os testes unitários até que todos passem"*.
 3. **Atenção aos Segredos (`.env`):** Nunca cole chaves de API de produção, senhas de banco de dados ou dados sensíveis de clientes diretamente no chat.
 4. **Evolua o nosso `CLAUDE.md`:** Se notar que o Claude cometeu um erro repetitivo no projeto (ex: importou uma biblioteca antiga em vez da nova), adicione uma linha explicando isso no `CLAUDE.md` e suba no seu PR para ajudar todo o resto da equipe!
+
+---
+
+<a id="sec-8-otimizando-tokens"></a>
+
+## 🧠 8. Otimizando o Uso de Tokens! (Multi-Modelos, Advisor e Subagentes)
+
+Rodar o modelo mais pesado (`opus`) o tempo inteiro para ler arquivos grandes, renomear pastas ou fazer edições simples consome a franquia da equipe até **5x mais rápido** sem necessidade.
+
+O segredo de ouro no Claude Code é **combinar modelos diferentes na mesma sessão**: colocar o **Opus como o "cérebro/conselheiro"** da operação, o **Sonnet como o "executor"** principal e o **Haiku nos "subagentes"** (que fazem o trabalho braçal de ler dezenas de arquivos e vasculhar pastas em segundo plano).
+
+### 8.1. Entendendo a Arquitetura: Principal vs. Advisor vs. Subagentes
+
+No Claude Code, até 3 camadas de modelos podem trabalhar juntas:
+
+1. **Modelo Principal (`--model`):** É quem conduz a conversa, edita arquivos e roda comandos no terminal (`sonnet`, `haiku`, `opus` ou `opusplan`).
+2. **Modelo Conselheiro (`--advisor`):** Ativado com `--advisor opus` (ou `/advisor opus`). Enquanto o modelo principal mais econômico trabalha, o **Opus** é acionado automaticamente apenas nos **3 momentos críticos**:
+   * Antes de começar a escrever código (para validar o plano de ação);
+   * Quando o agente principal trava num erro repetitivo;
+   * Antes de finalizar a tarefa (para auditar se tudo foi cumprido).
+3. **Subagentes (`CLAUDE_CODE_SUBAGENT_MODEL` ou `/agents`):** Quando o Claude precisa vasculhar o projeto, ler vários PDFs ou rodar testes, ele cria "subagentes" que rodam em janelas de contexto isoladas e devolvem apenas um resumo para a conversa principal.
+
+> ⚠️ **Nota técnica importante sobre o comando no terminal:**
+> A flag `--advisor opus` existe nativamente na CLI, mas **não existe uma flag chamada `--subagents haiku`** diretamente no comando `claude`. Para definir o modelo dos subagentes como `haiku` (ou qualquer outro), usamos a variável de ambiente `CLAUDE_CODE_SUBAGENT_MODEL` ou arquivos de configuração! Veja abaixo como rodar.
+
+---
+
+### 8.2. Como Rodar o "Combo de Otimização" (Opus Cérebro + Subagentes Haiku)
+
+#### Opção 1: Pelo Terminal (PowerShell) para uma sessão
+
+Copie e cole no PowerShell para iniciar o **Sonnet** como principal, **Opus** como conselheiro (Advisor) e **Haiku** para todos os subagentes:
+
+```powershell
+$env:CLAUDE_CODE_SUBAGENT_MODEL="haiku"; claude --model sonnet --advisor opus
+```
+
+Se a tarefa for bem simples e você quiser economizar ainda mais usando o próprio **Haiku** como executor principal sob supervisão do **Opus**:
+
+```powershell
+$env:CLAUDE_CODE_SUBAGENT_MODEL="haiku"; claude --model haiku --advisor opus
+```
+
+#### Opção 2: Deixar Salvo nas Configurações (Recomendado!)
+
+Para não precisar digitar o comando grande toda vez, você pode salvar essa estrutura no seu arquivo `.claude/settings.local.json` (no projeto) ou `C:\Users\SeuUsuario\.claude\settings.json` (global):
+
+```json
+{
+  "model": "sonnet",
+  "advisorModel": "opus",
+  "env": {
+    "CLAUDE_CODE_SUBAGENT_MODEL": "haiku",
+    "CLAUDE_CODE_SUBAGENT_MODEL_FORCE": "1"
+  }
+}
+```
+*(A variável `CLAUDE_CODE_SUBAGENT_MODEL_FORCE=1` garante que qualquer subagente use o modelo econômico definido por você).*
+
+---
+
+### 8.3. Posso escolher outros modelos para Subagentes diferentes?
+
+**Sim!** Você pode usar `haiku`, `sonnet`, `opus` ou `inherit` (herdar o modelo principal). Melhor ainda: você pode ter **subagentes especializados com modelos diferentes** para cada função!
+
+Dentro do Claude Code, digite `/agents` (ou crie arquivos na pasta `.claude/agents/`) para definir qual modelo cada ajudante vai usar:
+
+* **Subagente Leitor/Explorador (`model: haiku`):** Ideal para ler artigos, buscar funções no código e resumir logs. Rápido e super barato.
+* **Subagente Desenvolvedor/Testador (`model: sonnet`):** Ideal para escrever testes unitários ou refatorar módulos isolados.
+* **Subagente Revisor de Segurança/Arquitetura (`model: opus`):** Ideal para fazer um *code review* rigoroso antes de abrir um Pull Request.
+
+Você também pode criar um subagente sob demanda direto na linha de comando usando a flag `--agents`:
+
+```powershell
+claude --model sonnet --advisor opus --agents '{\"resumidor\":{\"description\":\"Lê e resume arquivos extensos\",\"prompt\":\"Extraia os pontos principais de forma enxuta\",\"model\":\"haiku\"}}'
+```
+
+---
+
+### 8.4. Guia Prático: O Melhor Comando para Cada Atividade (Sem Perder Qualidade!)
+
+Abaixo estão as combinações mais otimizadas para os **4 cenários mais comuns do nosso grupo**, equilibrando qualidade máxima e baixo consumo de tokens (incluindo a flag `--effort`, que controla o gasto de tokens de raciocínio interno entre `low`, `medium`, `high` e `max`):
+
+#### 📄 Caso 1: Apenas Ler e Resumir Arquivos (PDFs, Artigos, Documentação, Logs)
+
+* **Por que otimizar:** Ler dezenas de páginas no `opus` estoura o limite de tokens rapidamente. O segredo é colocar subagentes `haiku` para ler os documentos brutos em janelas isoladas e deixar o `sonnet` (ou o próprio `haiku`) consolidar o resumo final.
+* **Comando para Resumos Rápidos do Dia a Dia (Máxima Economia):**
+  ```powershell
+  claude --model haiku --effort low
+  ```
+* **Comando para Pesquisas Acadêmicas e Fichamentos Densos (Alta Qualidade de Escrita):**
+  ```powershell
+  $env:CLAUDE_CODE_SUBAGENT_MODEL="haiku"; claude --model sonnet --effort medium
+  ```
+  > 💡 **Dica de Prompt:** Peça *"Use subagentes em paralelo para ler cada artigo desta pasta e me traga uma síntese comparativa"*. Assim, o texto bruto gigante dos artigos fica isolado no `haiku` e não polui a memória principal do `sonnet`!
+
+#### 📁 Caso 2: Organizar Pastas, Renomear Arquivos e Padronizar Diretórios
+
+* **Por que otimizar:** Tarefas mecânicas de sistema de arquivos (`mkdir`, `mv`, organizar por data/tema) não exigem raciocínio profundo. Usar `opus` ou `effort high` aqui desperdiça tokens de pensamento à toa.
+* **Comando Mais Otimizado:**
+  ```powershell
+  claude --model haiku --effort low
+  ```
+
+#### 🛠️ Caso 3: Programar Scripts Básicos, Automações e Correções Simples
+
+* **Por que otimizar:** Scripts em Python/Bash, criação de componentes simples, ajustes de CSS ou correção de bugs pontuais são a especialidade nativa do `sonnet` (ou até do `haiku` com um conselheiro).
+* **Comando Padrão Ágil (Melhor Custo-Benefício):**
+  ```powershell
+  $env:CLAUDE_CODE_SUBAGENT_MODEL="haiku"; claude --model sonnet --effort medium
+  ```
+* **Comando Ultra Econômico com Rede de Segurança:**
+  ```powershell
+  claude --model haiku --advisor sonnet --effort low
+  ```
+  *(O Haiku programa o script super rápido; se tiver qualquer dúvida na lógica, o Sonnet entra como conselheiro).*
+
+#### 🏗️ Caso 4: Programar Sistemas Complexos, Arquitetura e Refatorações Grandes
+
+* **Por que otimizar:** Aqui não podemos abrir mão da inteligência do **Opus**, mas não queremos pagar preço de Opus enquanto o Claude apenas procura arquivos ou edita imports repetitivos. Temos **duas estratégias de elite**:
+
+* **Estratégia A — O "Cérebro Opus" (Advisor + Sonnet + Subagentes Haiku):**
+  O `sonnet` escreve o código pesado, o `haiku` vasculha o repositório nos subagentes e o `opus` supervisiona o plano inicial, destrava bugs difíceis e revisa o resultado final.
+  ```powershell
+  $env:CLAUDE_CODE_SUBAGENT_MODEL="haiku"; claude --model sonnet --advisor opus --effort high
+  ```
+
+* **Estratégia B — O Modo `opusplan` (Opus Planeja + Sonnet Executa):**
+  O Claude Code tem um modo secreto chamado `opusplan`. Nele, enquanto você está no **Modo de Planejamento (`Shift + Tab`)**, você conversa diretamente com o **Opus** para desenhar toda a arquitetura. Assim que você aprova o plano e aperta `Shift + Tab` para codar, ele troca **automaticamente para o Sonnet** para implementar o código!
+  ```powershell
+  $env:CLAUDE_CODE_SUBAGENT_MODEL="haiku"; claude --model opusplan
+  ```
+
+---
+
+### 📊 Tabela Resumo: Qual Comando Usar Hoje?
+
+| Atividade | Modelo Principal | Advisor (Cérebro) | Subagentes | Comando Rápido (PowerShell) |
+| :--- | :--- | :--- | :--- | :--- |
+| **Organizar pastas / Renomear** | `haiku` | *Nenhum* | `haiku` | `claude --model haiku --effort low` |
+| **Ler e resumir textos simples** | `haiku` | *Nenhum* | `haiku` | `claude --model haiku --effort low` |
+| **Pesquisa acadêmica / Artigos** | `sonnet` | *Nenhum* | `haiku` | `$env:CLAUDE_CODE_SUBAGENT_MODEL="haiku"; claude --model sonnet --effort medium` |
+| **Scripts básicos e bugs simples** | `sonnet` | *Nenhum* (ou `sonnet`) | `haiku` | `$env:CLAUDE_CODE_SUBAGENT_MODEL="haiku"; claude --model sonnet --effort medium` |
+| **Sistemas complexos (Advisor)** | `sonnet` | `opus` | `haiku` | `$env:CLAUDE_CODE_SUBAGENT_MODEL="haiku"; claude --model sonnet --advisor opus` |
+| **Arquitetura pesada (`opusplan`)** | `opusplan` | *Automático no Plan* | `haiku` | `$env:CLAUDE_CODE_SUBAGENT_MODEL="haiku"; claude --model opusplan` |
+
+### 💡 3 Dicas Extras para Economizar Tokens Todos os Dias
+
+1. **Crie um `.claudeignore` na raiz do projeto:** Funciona igual ao `.gitignore`. Coloque lá pastas com arquivos gigantes que o Claude não precisa ler (ex: `dados_brutos/`, `*.csv`, `*.log`, `dist/`, `pdfs_antigos/`).
+2. **Troque de modelo no meio da conversa se precisar:** Começou uma sessão normal e percebeu que a tarefa ficou muito fácil ou muito difícil? Basta digitar `/model haiku`, `/model sonnet` ou `/model opusplan`, e `/effort low` ou `/effort high` sem precisar fechar o terminal!
+3. **Use `/btw` para dúvidas rápidas:** Se estiver no meio de um código grande e quiser perguntar *"Qual é mesmo o comando git para criar branch?"*, use `/btw qual o comando...`. Ele responde sem gravar essa pergunta no histórico principal, economizando tokens em todas as mensagens seguintes!
 
 💡 *Dúvidas ou descobriu um comando novo muito útil? Compartilhe no canal do nosso time e atualize este README! 🚀*
