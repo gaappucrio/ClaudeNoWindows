@@ -6,6 +6,8 @@ O **Claude Code** é a ferramenta oficial de linha de comando (CLI) agêntica da
 
 Este documento foi criado para padronizar a instalação no Windows, configurar nosso ambiente da melhor forma possível e garantir que todos do time extraiam o máximo de produtividade no dia a dia — seja para programação quanto para pesquisas e trabalhos acadêmicos.
 
+Caso tenha interesse em definir preferências e interação entre 2 agentes diferentes, como exemplo o Gemini Antigravity e o Claude Code ao mesmo tempo, recomendo seguir o repositório: https://github.com/Esppartano/agent-personal-preferences-template.git
+
 ## 📋 Índice
 
 1. [Pré-requisitos e Instalação no Windows](#sec-1-instalacao-windows)
